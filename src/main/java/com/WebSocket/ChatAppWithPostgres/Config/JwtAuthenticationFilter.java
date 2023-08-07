@@ -1,5 +1,6 @@
 package com.WebSocket.ChatAppWithPostgres.Config;
 
+import com.WebSocket.ChatAppWithPostgres.Repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -40,7 +42,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //if user name is valid and second condition checks if there is already authenticated user or not
         if(userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+            var isTokenValid = tokenRepository.findByToken(jwt)
+                    .map(token -> !token.isExpired() && !token.isRevoked())
+                    .orElse(false);
+
+            if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

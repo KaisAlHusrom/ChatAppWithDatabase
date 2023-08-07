@@ -1,6 +1,7 @@
 package com.WebSocket.ChatAppWithPostgres.Model.User;
 
 import com.WebSocket.ChatAppWithPostgres.Model.Message.Message;
+import com.WebSocket.ChatAppWithPostgres.Model.Token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Integer id;
 
     @Column(name = "user_name", unique = true)
@@ -59,6 +60,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "receiver")
     private List<Message> receivedMessages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @Enumerated(EnumType.STRING)
     private Role role;
