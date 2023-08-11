@@ -2,6 +2,8 @@ package com.WebSocket.ChatAppWithPostgres.Model.User;
 
 import com.WebSocket.ChatAppWithPostgres.Model.Message.Message;
 import com.WebSocket.ChatAppWithPostgres.Model.Token.Token;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,6 +64,7 @@ public class User implements UserDetails {
     private List<Message> receivedMessages = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Token> tokens;
 
     @Enumerated(EnumType.STRING)

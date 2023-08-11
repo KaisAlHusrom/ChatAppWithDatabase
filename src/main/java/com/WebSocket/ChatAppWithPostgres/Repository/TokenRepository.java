@@ -1,6 +1,7 @@
 package com.WebSocket.ChatAppWithPostgres.Repository;
 
 import com.WebSocket.ChatAppWithPostgres.Model.Token.Token;
+import com.WebSocket.ChatAppWithPostgres.Model.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,6 +16,11 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
     """)
     List<Token> findAllValidTokensByUser(Integer userId);
 
+    @Query("""
+    select t from Token t inner join User u on t.user.id = u.id
+    where u.id = :userId
+    """)
+    List<Token> findAllByUser(Integer userId);
 
     Optional<Token> findByToken(String token);
 }

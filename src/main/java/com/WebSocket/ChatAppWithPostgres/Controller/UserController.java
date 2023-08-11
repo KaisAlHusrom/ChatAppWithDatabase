@@ -1,6 +1,7 @@
 package com.WebSocket.ChatAppWithPostgres.Controller;
 
 import com.WebSocket.ChatAppWithPostgres.Model.User.User;
+import com.WebSocket.ChatAppWithPostgres.Model.User.UserDTO;
 import com.WebSocket.ChatAppWithPostgres.Repository.UserRepository;
 import com.WebSocket.ChatAppWithPostgres.Services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("get-all-users")
-    public ResponseEntity<List<User>> getAllUser() {
+    @GetMapping("/get-all-users")
+    public ResponseEntity<List<UserDTO>> getAllUser() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 }

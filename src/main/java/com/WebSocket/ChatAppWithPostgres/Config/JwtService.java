@@ -24,6 +24,8 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public Date extractExpirationDate(String token) {return extractClaim(token, Claims::getExpiration);}
+
     //Extract Claim From Token
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
